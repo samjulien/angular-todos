@@ -1,0 +1,24 @@
+<li [class.checked]="task.completed"
+    [class.private]="task.private">
+
+    <button class="delete"
+            (click)="onRemove(task)">&times;</button>
+
+    <input type="checkbox"
+           class="toggle-checked"
+           (click)="onToggleStatus(task)"/>
+
+    <button class="toggle-private"
+            *ng-if="task.owner === currentUser"
+            (click)="onToggleVisibility(task)">
+    <span *ng-if="task.private">
+      Private
+    </span>
+    <span *ng-if="!task.private">
+      Public
+    </span>
+    </button>
+
+    <span class="text">{{task.text}}</span>
+
+</li>

@@ -1,0 +1,8 @@
+<ul>
+    <task-item *ng-for="#task of tasks"
+               [currentUser]="currentUser"
+               [task]="task"
+               (toggle-status)="onToggleStatus(task)"
+               (toggle-visibility)="onToggleVisibility(task)"
+               (remove)="onRemove(task)"/>
+</ul>
