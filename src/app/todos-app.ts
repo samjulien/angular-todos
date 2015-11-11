@@ -11,7 +11,7 @@ import {User} from './model/User';
 // Redux
 import {bindActionCreators, createStore, Store} from 'redux';
 import rootReducer from './reducers/RootReducer';
-import { AppState } from './reducers/AppState';
+import { TodosState } from './TodosState';
 import { Filters } from './actions/FilterActions';
 import * as AuthActions from './actions/AuthActions';
 import * as TaskActions from './actions/TaskActions';
@@ -19,16 +19,14 @@ import * as FilterActions from './actions/FilterActions';
 
 @Component({
     directives: [NgIf, LoginComponent, TaskFormComponent, TaskListComponent],
-    selector: 'simple-todos',
-    templateUrl: '/app/simple-todos.html'
+    selector: 'todos-app',
+    templateUrl: '/app/todos-app.html'
 })
-class SimpleTodosComponent {
+class TodosApp {
 
-    state: AppState
+    state: TodosState
     store: Store
     unsubscribe: Function
-
-    constructor() {}
 
     get incompleteCount() {
       return this.state.tasks.filter((task: Task) => !task.completed).length
@@ -54,7 +52,7 @@ class SimpleTodosComponent {
         ]
       }
       // Create redux store from reducers
-      this.store = createStore(rootReducer, initialState) // InitialSate is optional
+      this.store = createStore(rootReducer, initialState)
       // Initial state
       this.state = this.store.getState();
       console.log('store initial state', this.state)
@@ -64,7 +62,7 @@ class SimpleTodosComponent {
         console.log('store changed', this.state)
       });
       // Bind action creators
-      //this.actions = bindActionCreators(TaskActions, this.store.dispatch);
+      //this.taskActions = bindActionCreators(TaskActions, this.store.dispatch);
     }
 
     onDestroy() {
@@ -108,4 +106,4 @@ class SimpleTodosComponent {
     }
 
 }
-bootstrap(SimpleTodosComponent);
+bootstrap(TodosApp);

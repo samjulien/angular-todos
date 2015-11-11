@@ -11,9 +11,9 @@ export function tasks(tasks: Task[] = [], action) {
         action.task
       ]
     case REMOVE_TASK:
-      return tasks.filter( (task: Task) => task.id != action.id )
+      return tasks.filter((task: Task) => task.id != action.id )
     case TOGGLE_TASK_STATUS:
-      index = findTaskIndex(tasks, action.id);
+      index = tasks.findIndex((task: Task) => task.id == action.id)
       if (index < 0) {
         return tasks
       } else {
@@ -27,7 +27,7 @@ export function tasks(tasks: Task[] = [], action) {
         ]
       }
     case TOGGLE_TASK_VISIBILITY:
-      index = findTaskIndex(tasks, action.id);
+      index = tasks.findIndex((task: Task) => task.id == action.id)
       if (index < 0) {
         return tasks
       } else {
@@ -44,10 +44,4 @@ export function tasks(tasks: Task[] = [], action) {
       return tasks
   }
 
-}
-
-// PRIVATE
-
-function findTaskIndex(tasks: Task[], taskId: number): number {
-  return tasks.map( (task: Task) => task.id ).indexOf(taskId)
 }
