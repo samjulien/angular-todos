@@ -2,33 +2,30 @@
 
     <header>
 
-        <h1>Todo List ({{taskStore.incompleteCount}})</h1>
+        <h1>Todo List ({{incompleteCount}})</h1>
 
         <label class="hide-completed">
             <input type="checkbox"
-                   [checked]="hideCompleted"
-                   (click)="onHideCompleted()"/>
+                   (click)="onToggleStatusFilter()"/>
             Hide Completed Tasks
         </label>
 
         <div>
             <login
-                    *ng-if="!currentUser"
+                    *ng-if="!state.currentUser"
                     (login)="onLogin($event)"/>
         </div>
 
-        <task-creator
-                *ng-if="currentUser"
-                [currentUser]="currentUser"
+        <task-form
+                *ng-if="state.currentUser"
                 (create)="onCreate($event)"/>
 
     </header>
 
     <task-list
-            [currentUser]="currentUser"
-            [tasks]="taskStore.list"
+            [currentUser]="state.currentUser"
+            [tasks]="filteredTodos"
             (toggle-status)="onToggleStatus($event)"
             (toggle-visibility)="onToggleVisibility($event)"
             (remove)="onRemove($event)"/>
-
 </div>

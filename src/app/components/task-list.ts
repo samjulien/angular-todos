@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output, NgFor} from 'angular2/angular2';
 import {Task} from '../model/Task';
+import {User} from '../model/User';
 import {TaskItemComponent} from './task-item';
 
 @Component({
@@ -9,21 +10,22 @@ import {TaskItemComponent} from './task-item';
 })
 export class TaskListComponent {
 
-    @Input() tasks:Task[];
-    @Output() remove:EventEmitter = new EventEmitter();
-    @Output() toggleStatus:EventEmitter = new EventEmitter();
-    @Output() toggleVisibility:EventEmitter = new EventEmitter();
+    @Input() currentUser: User
+    @Input() tasks: Task[]
+    @Output() remove: EventEmitter = new EventEmitter()
+    @Output() toggleStatus: EventEmitter = new EventEmitter()
+    @Output() toggleVisibility: EventEmitter = new EventEmitter()
 
-    onToggleStatus(task:Task) {
-        this.toggleStatus.next(task);
+    onToggleStatus(id: number) {
+      this.toggleStatus.next(id)
     }
 
-    onToggleVisibility(task:Task) {
-        this.toggleVisibility.next(task);
+    onToggleVisibility(id: number) {
+        this.toggleVisibility.next(id)
     }
 
-    onRemove(task:Task) {
-        this.remove.next(task);
+    onRemove(id: number) {
+        this.remove.next(id)
     }
 
 }

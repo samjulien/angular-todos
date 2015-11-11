@@ -20,7 +20,10 @@
     <script>
         System.config({
           packages: {
-                'app': {defaultExtension: 'js'}
+            'app': {defaultExtension: 'js'}
+          },
+          map: {
+            'redux': 'libs/redux/redux.min.js'
           }
         });
         System.import('app/simple-todos');

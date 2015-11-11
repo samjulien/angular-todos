@@ -2,15 +2,15 @@
     [class.private]="task.private">
 
     <button class="delete"
-            (click)="onRemove(task)">&times;</button>
+            (click)="onRemove(task.id)">&times;</button>
 
     <input type="checkbox"
            class="toggle-checked"
-           (click)="onToggleStatus(task)"/>
+           (click)="onToggleStatus(task.id)"/>
 
     <button class="toggle-private"
             *ng-if="task.owner === currentUser"
-            (click)="onToggleVisibility(task)">
+            (click)="onToggleVisibility(task.id)">
     <span *ng-if="task.private">
       Private
     </span>

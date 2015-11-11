@@ -8,12 +8,11 @@ import {User} from '../model/User';
 })
 export class LoginComponent {
 
-    @Output() login:EventEmitter = new EventEmitter();
+    @Output() login: EventEmitter = new EventEmitter()
 
     onSubmit(inputElement) {
-        let user:User = new User(inputElement.value);
-        inputElement.value = '';
-        this.login.next(user);
+        this.login.next(inputElement.value)
+        inputElement.value = ''
     }
 
 }

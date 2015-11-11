@@ -9,22 +9,22 @@ import {User} from '../model/User';
 })
 export class TaskItemComponent {
 
-    @Input() currentUser:User;
-    @Input() task:Task;
-    @Output() remove:EventEmitter = new EventEmitter();
-    @Output() toggleStatus:EventEmitter = new EventEmitter();
-    @Output() toggleVisibility:EventEmitter = new EventEmitter();
+    @Input() currentUser: User
+    @Input() task: Task
+    @Output() remove: EventEmitter = new EventEmitter()
+    @Output() toggleStatus: EventEmitter = new EventEmitter()
+    @Output() toggleVisibility: EventEmitter = new EventEmitter()
 
-    onToggleStatus(task:Task) {
-        this.toggleStatus.next(task);
+    onToggleStatus(id: number) {
+        this.toggleStatus.next(id)
     }
 
-    onToggleVisibility(task:Task) {
-        this.toggleVisibility.next(task);
+    onToggleVisibility(id: number) {
+        this.toggleVisibility.next(id)
     }
 
-    onRemove(task:Task) {
-        this.remove.next(task);
+    onRemove(id: number) {
+        this.remove.next(id)
     }
 
 }

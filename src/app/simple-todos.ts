@@ -1,50 +1,110 @@
+/// <reference path="../../typings/redux/redux"/>
 import {Component, NgIf, bootstrap} from 'angular2/angular2';
 // Components
 import {LoginComponent} from './components/login';
-import {TaskCreatorComponent} from './components/task-creator';
+import {TaskFormComponent} from './components/task-form';
 import {TaskListComponent} from './components/task-list';
 // Models
 import {Task} from './model/Task';
 import {User} from './model/User';
-// Services
-import {TaskStore} from './services/TaskStore';
+
+// Redux
+import {bindActionCreators, createStore, Store} from 'redux';
+import rootReducer from './reducers/RootReducer';
+import { AppState } from './reducers/AppState';
+import { Filters } from './actions/FilterActions';
+import * as AuthActions from './actions/AuthActions';
+import * as TaskActions from './actions/TaskActions';
+import * as FilterActions from './actions/FilterActions';
 
 @Component({
-    directives: [NgIf, LoginComponent, TaskCreatorComponent, TaskListComponent],
+    directives: [NgIf, LoginComponent, TaskFormComponent, TaskListComponent],
     selector: 'simple-todos',
     templateUrl: '/app/simple-todos.html'
 })
 class SimpleTodosComponent {
 
-    currentUser:User;
-    taskStore:TaskStore;
+    state: AppState
+    store: Store
+    unsubscribe: Function
 
-    constructor() {
-        this.taskStore = new TaskStore();
+    constructor() {}
+
+    get incompleteCount() {
+      return this.state.tasks.filter((task: Task) => !task.completed).length
     }
 
-    onCreate(task:Task) {
-        this.taskStore.add(task);
+    get filteredTodos(): Task[] {
+      switch(this.state.filter) {
+        case Filters.SHOW_ACTIVE:
+          return this.state.tasks.filter((task: Task) => !task.completed)
+        default:
+          return this.state.tasks
+      }
     }
 
-    onHideCompleted() {
-        this.taskStore.hideCompleted();
+    onInit() {
+      // Dummy initial state
+      const user = new User("Fred");
+      const initialState = {
+        tasks: [
+          new Task("First task", user),
+          new Task("Second task", user),
+          new Task("Third task", user)
+        ]
+      }
+      // Create redux store from reducers
+      this.store = createStore(rootReducer, initialState) // InitialSate is optional
+      // Initial state
+      this.state = this.store.getState();
+      console.log('store initial state', this.state)
+      // Subscribe to store changes
+      this.unsubscribe = this.store.subscribe(() => {
+        this.state = this.store.getState()
+        console.log('store changed', this.state)
+      });
+      // Bind action creators
+      //this.actions = bindActionCreators(TaskActions, this.store.dispatch);
     }
 
-    onLogin(user:User) {
-        this.currentUser = user;
+    onDestroy() {
+      this.unsubscribe()
     }
 
-    onToggleStatus(task:Task) {
-        this.taskStore.toggleStatus(task);
+    // Auth actions
+
+    onLogin(userName: string) {
+      let user: User = new User(userName)
+      this.store.dispatch(AuthActions.login(user))
     }
 
-    onToggleVisibility(task:Task) {
-        this.taskStore.toggleVisibility(task);
+    // Tasks actions
+
+    onCreate(text: string) {
+      let newTask = new Task(text, this.state.currentUser)
+      this.store.dispatch(TaskActions.addTask(newTask))
     }
 
-    onRemove(task:Task) {
-        this.taskStore.remove(task);
+    onToggleStatus(id: number) {
+      this.store.dispatch(TaskActions.toggleTaskStatus(id))
+    }
+
+    onToggleVisibility(id: number) {
+      this.store.dispatch(TaskActions.toggleTaskVisibility(id))
+    }
+
+    onRemove(id: number) {
+      this.store.dispatch(TaskActions.removeTask(id))
+    }
+
+    // Visibility actions
+
+    onToggleStatusFilter() {
+      if (this.state.filter == Filters.SHOW_ALL) {
+        this.store.dispatch(FilterActions.setFilter(Filters.SHOW_ACTIVE))
+      } else {
+        this.store.dispatch(FilterActions.setFilter(Filters.SHOW_ALL))
+      }
     }
 
 }

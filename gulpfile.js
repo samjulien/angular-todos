@@ -29,7 +29,11 @@ gulp.task('setup', ['assets', 'compile'], function (done) {
     ]).pipe(gulp.dest(dist + '/libs/systemjs'));
 
     gulp.src([
-        'bower_components/jquery/dist/*.min.js'
+        'node_modules/redux/dist/*.min.js'
+    ]).pipe(gulp.dest(dist + '/libs/redux'));
+
+    gulp.src([
+        'node_modules/jquery/dist/*.min.js'
     ]).pipe(gulp.dest(dist + '/libs/jquery'));
 
     /*gulp.src([
